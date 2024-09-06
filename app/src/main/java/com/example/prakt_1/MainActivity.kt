@@ -208,9 +208,12 @@ fun Task2(modifier: Modifier = Modifier) {
         val ap = ag * (100 - wg) / 100.0
         val vp = vg * (100 - wg) / 100.0
 
+        val check = cp + hg + og + sg
+
         val qri = qi * (100 - wg - ag/100) - 0.025 * wg
 
-        return """
+        return if (check== 100.0) {
+            """
             Склад робочої маси мазуту:
             Вуглець Сp = $cp %
             Водень Hp = $hp %
@@ -222,7 +225,10 @@ fun Task2(modifier: Modifier = Modifier) {
             Нижча теплота згоряння мазуту на робочу масу для робочої маси за заданим складом
             компонентів палива: $qri кДж/кг
             """.trimIndent()
-    }
+        }else {
+                "Помилка в розрахунках"
+            }
+        }
 
     Column(
         modifier = modifier
