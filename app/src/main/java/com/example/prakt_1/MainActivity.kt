@@ -29,13 +29,13 @@ class MainActivity : ComponentActivity() {
 fun checkAndToDouble(input: String): Double? {
     return try {
         val value = input.toDouble()
-        if (value >= 0) value else null // Если отрицательное
-    } catch (e: NumberFormatException) { // Если не число
+        if (value >= 0) value else null // Якщо число від'ємне
+    } catch (e: NumberFormatException) { // Якщо не число
         null
     }
 }
 
-// Перемикання мыж калькуляторами
+// Перемикання між калькуляторами
 @Composable
 fun CalculatorSwitcher(modifier: Modifier = Modifier) {
 
@@ -199,7 +199,6 @@ fun Task2(modifier: Modifier = Modifier) {
     var result by remember { mutableStateOf("") }
     var errorMessage by remember { mutableStateOf("") }
     val scrollState = rememberScrollState()
-    // Простой расчет для примера (сложение двух чисел)
     fun calculate2(cg: Double, hg: Double, og: Double, sg: Double, qi: Double, vg: Double,
                         wg: Double, ag: Double): String {
         val cp = cg * (100 - wg - ag) / 100.0
