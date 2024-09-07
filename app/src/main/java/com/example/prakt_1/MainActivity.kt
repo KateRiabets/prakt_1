@@ -39,18 +39,20 @@ fun checkAndToDouble(input: String): Double? {
 @Composable
 fun CalculatorSwitcher(modifier: Modifier = Modifier) {
 
+    //змінна для збереження вибору - за замовчуванням обрано 1
     var selectedCalculator by remember { mutableStateOf(1) }
 
+    //Колонка
     Column(
         modifier = modifier
-            .fillMaxSize()
-            .padding(16.dp),
+            .fillMaxSize() // На весь екран
+            .padding(16.dp), // Відступи по краяї
         verticalArrangement = Arrangement.spacedBy(8.dp)
     ) {
         // Кнопки для вибору калькулятора
-        Row(
+        Row( // Рядок
             modifier = Modifier.fillMaxWidth(),
-            horizontalArrangement = Arrangement.SpaceEvenly
+            horizontalArrangement = Arrangement.SpaceEvenly // Рівномірне розподілення по ширині
         ) {
             Button(onClick = { selectedCalculator = 1 }) {
                 Text("Завдання 1")
@@ -70,6 +72,7 @@ fun CalculatorSwitcher(modifier: Modifier = Modifier) {
 // Перший калькулятор
 @Composable
 fun Task1(modifier: Modifier = Modifier) {
+    // Змінні для користувацького вводу
     var hp by remember { mutableStateOf("") }
     var cp by remember { mutableStateOf("") }
     var sp by remember { mutableStateOf("") }
@@ -77,11 +80,15 @@ fun Task1(modifier: Modifier = Modifier) {
     var op by remember { mutableStateOf("") }
     var wp by remember { mutableStateOf("") }
     var ap by remember { mutableStateOf("") }
+
+    // Змінна для результату
     var result by remember { mutableStateOf("") }
+
+    // Змінна для повідомлення про помилку
     var errorMessage by remember { mutableStateOf("") }
+
+    // Змінна для прокрутки вмісту
     val scrollState = rememberScrollState()
-
-
 
     fun calculate(
         hp: Double, cp: Double, sp: Double, np: Double, op: Double, wp: Double, ap: Double
@@ -104,32 +111,32 @@ fun Task1(modifier: Modifier = Modifier) {
         val og = op * krg
         val totalCheck2 = hg + cg + sg + ng + og
 
-        val qph = 339 * cp + 1030 * hp - 108.8 * (op - sp) - 25 * wp
+        val qph = (339 * cp + 1030 * hp - 108.8 * (op - sp) - 25 * wp)/1000
         val qch = (qph + 0.025 * wp) * 100.0 / (100 - wp)
         val qgh = (qph + 0.025 * wp) * 100.0 / (100 - wp - ap)
 
         return if (totalCheck == 100.0 && totalCheck2 == 100.0) {
             """
-            Коефіцієнт переходу від робочої до сухої маси: $kpc
-            Коефіцієнт переходу від робочої до горючої маси: $krg
+            Коефіцієнт переходу від робочої до сухої маси: ${"%.3f".format(kpc)}
+            Коефіцієнт переходу від робочої до горючої маси: ${"%.3f".format(krg)}
             Cклад сухої маси палива:
-            Hc = $hc %
-            Cc = $cc %
-            Sc = $sc %
-            Nc = $nc %
-            Oc = $oc %
-            Ac = $ac %
-            
+            Hc = ${"%.3f".format(hc)} %
+            Cc = ${"%.3f".format(cc)} %
+            Sc = ${"%.3f".format(sc)} %
+            Nc = ${"%.3f".format(nc)} %
+            Oc = ${"%.3f".format(oc)} %
+            Ac = ${"%.3f".format(ac)} %
+        
             Cклад горючої маси палива:
-            Hg = $hg %
-            Cg = $cg %
-            Sg = $sg %
-            Ng = $ng %
-            Og = $og %
-            
-            Теплота згорання робочої маси: $qph кДж/кг
-            Теплота згорання сухої маси: $qch кДж/кг
-            Теплота згорання горючої маси: $qgh кДж/кг
+            Hg = ${"%.3f".format(hg)} %
+            Cg = ${"%.3f".format(cg)} %
+            Sg = ${"%.3f".format(sg)} %
+            Ng = ${"%.3f".format(ng)} %
+            Og = ${"%.3f".format(og)} %
+        
+            Теплота згорання робочої маси: ${"%.3f".format(qph)} МДж/кг
+            Теплота згорання сухої маси: ${"%.3f".format(qch)} МДж/кг
+            Теплота згорання горючої маси: ${"%.3f".format(qgh)} МДж/кг
             """.trimIndent()
         } else {
             "Помилка в розрахунках"
@@ -143,6 +150,7 @@ fun Task1(modifier: Modifier = Modifier) {
             .verticalScroll(scrollState),
         verticalArrangement = Arrangement.spacedBy(8.dp)
     ) {
+
         TextField(value = hp, onValueChange = { hp = it }, label = { Text("Hp") })
         TextField(value = cp, onValueChange = { cp = it }, label = { Text("Cp") })
         TextField(value = sp, onValueChange = { sp = it }, label = { Text("Sp") })
@@ -162,7 +170,8 @@ fun Task1(modifier: Modifier = Modifier) {
             val wpValue = checkAndToDouble(wp)
             val apValue = checkAndToDouble(ap)
 
-            if (hpValue == null || cpValue == null || spValue == null || npValue == null || opValue == null || wpValue == null || apValue == null) {
+            if (hpValue == null || cpValue == null || spValue == null || npValue == null ||
+                opValue == null || wpValue == null || apValue == null) {
                 errorMessage = "Одне з полів порожнє або містить неправильні дані!"
                 result = ""
             } else {
@@ -199,6 +208,7 @@ fun Task2(modifier: Modifier = Modifier) {
     var result by remember { mutableStateOf("") }
     var errorMessage by remember { mutableStateOf("") }
     val scrollState = rememberScrollState()
+
     fun calculate2(cg: Double, hg: Double, og: Double, sg: Double, qi: Double, vg: Double,
                         wg: Double, ag: Double): String {
         val cp = cg * (100 - wg - ag) / 100.0
@@ -208,27 +218,22 @@ fun Task2(modifier: Modifier = Modifier) {
         val ap = ag * (100 - wg) / 100.0
         val vp = vg * (100 - wg) / 100.0
 
-        val check = cp + hg + og + sg
 
-        val qri = qi * (100 - wg - ag/100) - 0.025 * wg
+        val qri = qi * (100 - wg - ap )/ 100 - 0.025 * wg
 
-        return if (check== 100.0) {
-            """
+        return """
             Склад робочої маси мазуту:
-            Вуглець Сp = $cp %
-            Водень Hp = $hp %
-            Кисень Op = $op %
-            Сірка Sp = $sp %
-            Зола Ap = $ap %
-            Ванадій Vp = $vp мг/кг
-           
+            Вуглець Сp = ${"%.3f".format(cp)} %
+            Водень Hp = ${"%.3f".format(hp)} %
+            Кисень Op = ${"%.3f".format(op)} %
+            Сірка Sp = ${"%.3f".format(sp)} %
+            Зола Ap = ${"%.3f".format(ap)} %
+            Ванадій Vp = ${"%.3f".format(vp)} мг/кг
+            
             Нижча теплота згоряння мазуту на робочу масу для робочої маси за заданим складом
-            компонентів палива: $qri кДж/кг
+            компонентів палива: ${"%.3f".format(qri)} МДж/кг
             """.trimIndent()
-        }else {
-                "Помилка в розрахунках"
-            }
-        }
+    }
 
     Column(
         modifier = modifier
